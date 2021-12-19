@@ -8,7 +8,7 @@
 | u_id     | u_name | u_pwd                 | u_type   | r_name   | c_type   | c_num    | p_num    | u_level    | u_idct   | r_city   | r_cmty   | r_time   | m_time   |
 |          |        | 系统管理员 / 普通用户 |          |          |          |          | 11位数字 | 一般 / VIP |          |          |          |          |          |
 
-在后台数据库至少要建立一个管理员用户,用户名：admin,密码 admin。 
+注：在后台数据库至少要建立一个管理员用户,用户名：admin,密码 admin。 
 
 #### （2）“劳您驾”请求信息类
 
