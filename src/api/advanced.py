@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from src.db.query import select_all_from_tbC2inew, select_all_from_tbC2i3
+from src.db.request import select_all_from_tbC2inew, select_all_from_tbC2i3
 from lib.draw import draw
 
 advanced = Blueprint("advanced", __name__)

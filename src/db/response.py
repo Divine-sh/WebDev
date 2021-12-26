@@ -7,8 +7,8 @@ from pandas.core.frame import DataFrame
 from collections import defaultdict
 import datetime
 
-global user_num
-user_num = 100
+global response_num
+response_num = 100
 
 """
     用户注册时检查是否合理，返回检查结果
@@ -136,7 +136,6 @@ def user_info_modify(arg_list):
 # MySQL的用户：root, 密码:123456, 端口：3306,数据库：ltedb
 
 if __name__ == '__main__':
-    print('user')
     # print(user_register_check('user123'))
     # print(user_register(['user123', 'user123', 1, '李四', 0, '130984200008270016', '', 1, '', '河北', '志愿者']))
     # login_res = user_login(['admin', 'admin'])

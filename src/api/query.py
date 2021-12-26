@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from src.db.query import *
+from src.db.request import *
 
 query = Blueprint("query", __name__)
 

@@ -148,7 +148,7 @@ def table_update(table, arg_list):
     # sql语句
     sql_upt = f'UPDATE {tb_Name} '
     if tb_Name == 'tbUser':
-        arg = f'SET u_pwd=\'{arg_list[1]}\',p_num=\'{arg_list[2]}\' ' \
+        arg = f'SET u_pwd=\'{arg_list[1]}\',p_num=\'{arg_list[2]}\',u_idct=\'{arg_list[3]}\' ' \
               f'WHERE u_id=\'{arg_list[0]}\''
     elif tb_Name == 'tbRequest':
         arg = f'SET req_type={arg_list[1]},req_topic=\'{arg_list[2]}\',req_idct=\'{arg_list[3]}\',req_nop={arg_list[4]},end_time=\'{arg_list[5]}\' ' \
@@ -157,24 +157,23 @@ def table_update(table, arg_list):
         arg = f'SET rsp_idct=\'{arg_list[1]}\',m_time=NULL ' \
               f'WHERE rsp_id=\'{arg_list[0]}\''
     elif tb_Name == 'tbSuccess':
-        return
+        return False
     elif tb_Name == 'tbProfit':
-        return
+        return False
 
     sql_upt += arg
     try:
         cur.execute(sql_upt)
         print("执行MySQL更新语句成功")
+        res = True
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_upt, err))
+        res = False
     finally:
         cur.close()
         conn.commit()
         conn.close()
-        # # 若向tbPRB插入数据，则需要同时生成tbPRBNEW中的数据
-        # if table == 2:
-        #     print("若向tbPRB插入数据，则需要同时生成tbPRBNEW中的数据")
-        #     data_bulkinsert_prbnew()
+        return res
 
 
 if __name__ == '__main__':

@@ -14,15 +14,16 @@
 |参数名称|必选|类型|说明|
 |----|----|----|----|
 |u_name|是|string|用户名|
+|u_pwd|是|string|登录密码|
+|u_type|是|int|用户类型，能注册的都是普通用户，此项为1|
 |r_name|是|string|用户姓名|
 |c_type|是|string|证件类型（中华人民共和国居民身份证，台湾居民往来大陆通行证，港澳居民来往内地通行证，军人证件，护照，香港身份证，澳门身份证）|
 |c_num|是|string|证件号码|
-|u_pwd|是|string|用户密码|
 |p_num|否|string|电话号码（11位）|
+|u_level|是|int|默认为一般用户，此项为1|
 |u_idct|否|string|用户简介|
 |r_city|是|string|注册城市（要和证件匹配）|
 |r_cmty|是|string|注册社区|
-|r_time|是|timestamp|注册时间|
 
 ### 返回JSON
 
@@ -48,11 +49,47 @@
 
 ### 返回JSON
 
-| 属性    | 类型    | 说明                                  |
-| ------- | ------- | ------------------------------------- |
-| isAdmin | boolean | 普通用户为``False``，管理员为``True`` |
+| 属性     | 类型    | 说明                                  |
+| -------- | ------- | ------------------------------------- |
+| r_result | boolean | 成功为``True``，失败为``False``       |
+| u_id     | string  | 用户标识                              |
+| u_type   | int     | 用户类型，系统管理员(0) / 普通用户(1) |
 
-## （3）普通用户修改信息
+## （3）查询用户个人信息
+
+接口 URL：```/api/ordin/info```
+
+请求方法：```GET```
+
+编码方式：```application/x-www-form-urlencoded```
+
+### 请求参数
+
+| 参数名称 | 必选 | 类型   | 说明     |
+| -------- | ---- | ------ | -------- |
+| u_id     | 是   | string | 用户标识 |
+
+### 返回JSON
+
+| 属性     | 类型      | 说明                                                         |
+| -------- | --------- | ------------------------------------------------------------ |
+| r_result | boolean   | 成功为``True``，失败为``False``                              |
+| u_name   | string    | 成功为``True``，失败为``False``                              |
+| u_type   | int       | 用户类型，系统管理员(0) / 普通用户(1)                        |
+| r_name   | string    | 用户姓名                                                     |
+| c_type   | int       | 证件类型,中华人民共和国居民身份证0，台湾居民往来大陆通行证1，港澳居民来往内地通行证2，军人证件3，护照4，香港身份证5，澳门身份证6 |
+| c_num    | string    | 证件号码                                                     |
+| p_num    | string    | 手机号码                                                     |
+| u_level  | string    | 用户级别                                                     |
+| u_idct   | string    | 用户简介                                                     |
+| r_city   | string    | 注册城市                                                     |
+| r_cmty   | string    | 注册社区                                                     |
+| r_time   | timestamp | 注册时间                                                     |
+| m_time   | timestamp | 修改时间                                                     |
+
+
+
+## （4）普通用户修改信息
 
 接口 URL：```/api/ordin/modify```
 
@@ -64,10 +101,10 @@
 
 |参数名称|必选|类型|说明|
 |----|----|----|----|
+|u_id|是|string|用户标识|
 |p_num|否|string|联系电话（11位）|
 |u_pwd|否|string|密码|
 |u_idct|否|string|用户简介|
-|m_time|是|timestamp|修改时间|
 
 ### 返回JSON
 
@@ -75,7 +112,7 @@
 |---|---|---|
 |m_result|Boolean|成功为``True``，失败为``False``|
 
-## （4）普通用户发布请求信息
+## （5）普通用户发布请求信息
 
 接口 URL：```/api/ordin/request/release```
 
@@ -104,7 +141,7 @@
 |req_result|boolean|发布结果，成功为``True``，失败为``False``|
 |req_id|string|请求标识|
 
-## （5）普通用户查询自己发布的所有请求信息
+## （6）普通用户查询自己发布的所有请求信息
 
 接口 URL：```/api/ordin/request/info```
 
@@ -135,7 +172,7 @@
 |m_time|string|修改时间|
 |req_status|int|状态|
 
-## （6）普通用户删除（已发布还没有响应者）的请求信息
+## （7）普通用户删除（已发布还没有响应者）的请求信息
 
 接口 URL：```/api/ordin/request/delete```
 
@@ -155,7 +192,7 @@
 | ---------- | ------- | ----------------------------------------- |
 | del_result | boolean | 删除结果，成功为``True``，失败为``False`` |
 
-## （7）普通用户修改（已发布还没响应者）的请求信息
+## （8）普通用户修改（已发布还没响应者）的请求信息
 
 接口 URL：```/api/ordin/request/modify```
 
@@ -182,7 +219,7 @@
 | -------- | ------- | ----------------------------------------- |
 | m_result | boolean | 修改结果，成功为``True``，失败为``False`` |
 
-## （8）普通用户查看响应信息
+## （9）普通用户查看响应信息
 
 接口 URL：```/api/ordin/request/response_info```
 
@@ -207,7 +244,7 @@
 |rsp_time|timestamp|响应时间|
 |rsp_status|int|状态（0：待接受 / 1：同意 / 2：拒绝 / 3：取消）|
 
-## （9）普通用户处理响应信息
+## （10）普通用户处理响应信息
 
 接口 URL：```/api/ordin/request/opt_response```
 
@@ -228,7 +265,7 @@
 | ---------- | ------- | ----------------------------------------- |
 | opt_result | boolean | 处理结果，成功为``True``，失败为``False`` |
 
-## （10）用户查看所属社区所有帮忙请求信息
+## （11）用户查看所属社区所有帮忙请求信息
 
 接口 URL：```/api/ordin/response/request_info```
 
@@ -257,7 +294,7 @@
 |req_status|string|状态|
 
 
-## （11）用户提交相应信息
+## （12）用户提交响应信息
 
 接口 URL：```/api/ordin/response/respond```
 
@@ -280,7 +317,7 @@
 |rsp_id|string|响应标识|
 |rsp_result|boolean|发布响应信息结果，成功为``True``，失败为``False``|
 
-## （12）用户查看自己发布的响应信息
+## （13）用户查看自己发布的响应信息
 
 接口 URL：```/api/ordin/response/response_info```
 
@@ -306,7 +343,7 @@
 |m_time|timestamp|响应修改时间|
 |rsp_status|int|状态|
 
-## （13）普通用户修改还未被接受的响应信息
+## （14）普通用户修改还未被接受的响应信息
 
 接口 URL：```/api/user/response/modify```
 
@@ -328,7 +365,7 @@
 |---|---|---|
 |m_result|boolean|修改响应信息结果，成功为``True``，失败为``False``|
 
-## （13）普通用户删除还未被接受的响应信息
+## （15）普通用户删除还未被接受的响应信息
 
 接口 URL：```/api/user/response/delete```
 
@@ -348,7 +385,7 @@
 |---|---|---|
 |del_result|boolean|删除响应信息结果，成功为``True``，失败为``False``|
 
-## （14）普通用户查询已经被接受的响应
+## （16）普通用户查询已经被接受的响应
 
 接口 URL：```/api/user/response/accepted```
 
