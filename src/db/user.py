@@ -7,8 +7,7 @@ from pandas.core.frame import DataFrame
 from collections import defaultdict
 import datetime
 
-global user_num
-user_num = 100
+
 
 """
     用户注册时检查是否合理，返回检查结果
@@ -36,9 +35,10 @@ def user_register_check(u_name):
     成功返回u_id,失败返回'u0'
 """
 def user_register(arg_list):
-    global user_num
     # tbUser表
     table = 0
+    # 表名
+    table_name = var.table_Name[table]
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
@@ -47,9 +47,12 @@ def user_register(arg_list):
     sql_ins = var.sql_insert[table]
     # 将参数转化为元组
     # 生成u_id
-    u_id = f'u{user_num}'
-    user_num = user_num + 1
+    sql1 = f'SELECT nextid FROM tbsequence WHERE tablename=\'{table_name}\''
+    sql2 = f'UPDATE tbsequence SET nextid=nextid+1 WHERE tablename=\'{table_name}\''
+    cur.execute(sql1)
+    u_id = f'UR{cur.fetchone()[0]}'
     arg_list.insert(0, u_id)
+    cur.execute(sql2)
     # 生成r_time和m_time
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -61,15 +64,15 @@ def user_register(arg_list):
     try:
         cur.execute(sql_ins, tp)
         print("执行MySQL插入语句成功")
-        return u_id
+        res = u_id
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
-        return False
+        rse = 'UR0'
     finally:
         cur.close()
         conn.commit()
         conn.close()
-
+        return res
 
 """
     用户登录, 返回登录结果
@@ -132,13 +135,13 @@ def user_info_modify(arg_list):
     return tb.table_update(1, arg_list)
 
 
-# 初始化数据库连接，使用pymysql模块
-# MySQL的用户：root, 密码:123456, 端口：3306,数据库：ltedb
 
 if __name__ == '__main__':
     print('user')
     # print(user_register_check('user123'))
     # print(user_register(['user123', 'user123', 1, '李四', 0, '130984200008270016', '', 1, '', '河北', '志愿者']))
+    # print(user_register(['user456', 'user456', 1, '王五', 0, '130984200008270048', '', 1, '', '东北', '志愿者']))
+    # print(user_register(['user789', 'user789', 1, '孙六', 0, '130984200008270064', '', 1, '', '北京', '志愿者']))
     # login_res = user_login(['admin', 'admin'])
     # print(login_res)
     # print(user_info(login_res[0]))

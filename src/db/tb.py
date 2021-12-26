@@ -176,13 +176,71 @@ def table_update(table, arg_list):
         return res
 
 
+"""
+    统计表格中行数
+"""
+def table_count(table):
+    # 索引为table
+    table = table - 1
+    # 表名
+    tb_Name = var.table_Name[table]
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = f'SELECT COUNT(*) FROM {tb_Name}'
+    try:
+        cur.execute(sql)
+        tup = cur.fetchone()
+        num = tup[0]
+        print("执行MySQL计数语句成功")
+    except Exception as err:
+        print("执行MySQL: %s 时出错: \n%s" % (sql, err))
+    finally:
+        cur.close()
+        conn.commit()
+        conn.close()
+        return num
+
+
+"""
+    创建一个Sequence表
+"""
+def sequence_create():
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = """
+        CREATE TABLE tbsequence (
+            tablename VARCHAR(30) NOT NULL,
+            nextid bigint(20) NOT NULL,
+            PRIMARY KEY(tablename)
+        )
+    """
+    try:
+        cur.execute(sql)
+        print("创建tbsequence表成功")
+    except Exception as err:
+        print("执行MySQL: %s 时出错: \n%s" % (sql, err))
+    finally:
+        cur.close()
+        conn.commit()
+        conn.close()
+
+
 if __name__ == '__main__':
+    # sequence_create()
+
     # for i in range(1, 6):
     #     table_create(i)
 
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
-    # table_insert_tuple(1, ('u001', 'admin', 'admin', 0, '张三', 0, '110693184506080045', '18610750900', 0, '管理员用户，测试用', '北京', '测试社区', now, now))
+    # table_insert_tuple(1, ('UR001', 'admin', 'admin', 0, '张三', 0, '110693184506080045', '18610750900', 0, '管理员用户，测试用', '北京', '测试社区', now, now))
     # table_update(1, ('u001', 'admin123', '16630731691'))
     # table_update(1, ('u001', 'admin', '18610750900'))
+    # print(table_count(1))
+    # print(table_count(2))
+
 

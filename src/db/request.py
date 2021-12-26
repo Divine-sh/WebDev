@@ -7,38 +7,20 @@ from pandas.core.frame import DataFrame
 from collections import defaultdict
 import datetime
 
-global request_num
-request_num = 100
 
 """
-    用户注册时检查是否合理，返回检查结果
-    参数顺序：
-    u_name
+    用户发布请求信息，返回发布结果
+    参数顺序：arg_list(list)
+    req_cmty,req_uid,req_type,req_topic,req_idct,req_nop,end_time,req_photo
     返回值：
-    True:合理，False:不合理
+    成功返回req_id
+    失败返回'RQ0'
 """
-def user_register_check(u_name):
-    # 连接数据库
-    conn = var.pymysql_connect()
-    # 使用cursor()方法创建光标
-    cur = conn.cursor()
-    # 如果用户名存在，返回1，否则返回0
-    res = cur.execute(f"SELECT u_id,u_name FROM tbUser WHERE u_name=\'{u_name}\'")
-    # 返回结果
-    return bool(res)
-
-
-"""
-    用户注册, 返回注册结果
-    参数顺序: arg_list(list)
-    u_name, u_pwd, u_type, r_name, c_type, c_num, p_num, u_level, u_idct，r_city，r_cmty
-    返回值: string
-    成功返回u_id,失败返回'u0'
-"""
-def user_register(arg_list):
-    global user_num
+def user_request_release(arg_list):
     # tbUser表
-    table = 0
+    table = 1
+    # 表名
+    table_name = var.table_Name[table]
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
@@ -46,99 +28,193 @@ def user_register(arg_list):
     # sql语句
     sql_ins = var.sql_insert[table]
     # 将参数转化为元组
-    # 生成u_id
-    u_id = f'u{user_num}'
-    user_num = user_num + 1
-    arg_list.insert(0, u_id)
+    # 生成req_id
+    sql1 = f'SELECT nextid FROM tbsequence WHERE tablename=\'{table_name}\''
+    sql2 = f'UPDATE tbsequence SET nextid=nextid+1 WHERE tablename=\'{table_name}\''
+    cur.execute(sql1)
+    req_id = f'RQ{cur.fetchone()[0]}'
+    print(req_id)
+    arg_list.insert(1, req_id)
+    cur.execute(sql2)
+    # 格式化end_time
+    end_time = arg_list[7]
+    arg_list[7] = datetime.datetime.strptime(str(end_time), "%Y-%m-%d")
+    print(arg_list[7])
     # 生成r_time和m_time
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     arg_list.append(now)
     arg_list.append(now)
+    arg_list.append(1)
     # 生成元组
     tp = tuple(arg_list)
     # 插入数据库
     try:
         cur.execute(sql_ins, tp)
         print("执行MySQL插入语句成功")
-        return u_id
+        res = req_id
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
-        return False
+        res = 'RQ0'
     finally:
         cur.close()
         conn.commit()
         conn.close()
+        return res
 
 
 """
-    用户登录, 返回登录结果
-    参数顺序: arg_list(list)
-    u_name, u_pwd
-    返回值: 
-    成功返回list[u_id, u_type]
-    失败返回false
+    用户查询自己发布的所有请求信息，返回查询结果
+    参数顺序：
+    req_uid
+    返回值：
+    成功返回list[list[req_cmty,req_id,req_uid,req_type,req_topic,req_idct,req_nop,end_time,req_photo,req_time,m_time,req_status]]
+    失败返回False
 """
-def user_login(arg_list):
-    # 提取参数
-    u_name = arg_list[0]
-    u_pwd = arg_list[1]
+def user_request_info(req_uid):
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    sql = f'SELECT u_id,u_type FROM tbUser WHERE u_name=\'{u_name}\' AND u_pwd=\'{u_pwd}\''
+    sql = f'SELECT * ' \
+          f'FROM tbRequest WHERE req_uid=\'{req_uid}\''
     res = cur.execute(sql)
     if res == 0:
-        print("用户名不存在或密码错误！")
+        print("用户未发布请求信息！")
         return False
-    elif res == 1:
-        tup = cur.fetchone()
-        return list(tup)
+    else:
+        tup_list = []
+        for tup in cur.fetchall():
+            tup_list.append(list(tup))
+        return tup_list
 
 
 """
-    用户查询基本信息, 返回查询结果
-    参数顺序: u_id
-    返回值: 
-    成功返回list[u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
-    失败返回false
-"""
-def user_info(u_id):
-    # 连接数据库
-    conn = var.pymysql_connect()
-    # 使用cursor()方法创建光标
-    cur = conn.cursor()
-    sql = f'SELECT u_name,u_type,r_name,c_type,c_num,p_num,u_level,u_idct,r_city,r_cmty,r_time,m_time ' \
-          f'FROM tbUser WHERE u_id=\'{u_id}\''
-    res = cur.execute(sql)
-    if res == 0:
-        print("用户标识不存在！")
-        return False
-    elif res == 1:
-        tup = cur.fetchone()
-        return list(tup)
-
-
-"""
-    用户查询基本信息, 返回查询结果
-    参数顺序: arg_list(list)
-    u_id,u_pwd,p_num,u_idct
-    返回值: 
+    用户删除（已发布还没有响应者）的请求信息 (修改req_status)
+    注意删除请求信息时对应的相应信息也要删除
+    参数顺序：
+    req_id
+    返回值：
     成功返回True
+    失败返回False
+"""
+def user_request_delete(req_id):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # sql = f'DELETE FROM tbRequest WHERE req_id=\'{req_id}\''
+    sql1 = f'UPDATE tbRequest ' \
+           f'SET req_status=2 ' \
+           f'WHERE req_id=\'{req_id}\''
+
+    sql2 = f'UPDATE tbResponse ' \
+           f'SET rsp_status=3 ' \
+           f'WHERE req_id=\'{req_id}\''
+    try:
+        cur.execute(sql1)
+        print(f"修改请求{req_id}状态为已取消")
+        cur.execute(sql2)
+        print(f"修改与请求{req_id}相关的响应信息为取消")
+        res = True
+    except Exception as err:
+        print("执行MySQL: %s 时出错: \n%s" % (sql1, err))
+        res = False
+    finally:
+        cur.close()
+        conn.commit()
+        conn.close()
+        return res
+
+
+"""
+    用户修改（已发布还没响应者）的请求信息
+    参数顺序：arg_list(list)
+    req_id,req_type,req_topic,req_idct,req_nop,end_time,req_photo
+    返回值：
+    成功返回True
+    失败返回False
+"""
+def user_request_modify(arg_list):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = f'UPDATE tbRequest ' \
+          f'SET req_type=\'{arg_list[1]}\',req_topic=\'{arg_list[2]}\',req_idct=\'{arg_list[3]}\',req_nop={arg_list[4]},end_time=\'{arg_list[5]}\',req_photo=\'{arg_list[6]}\' ' \
+          f'WHERE req_id=\'{arg_list[0]}\''
+    try:
+        cur.execute(sql)
+        print("执行MySQL更新语句成功")
+        res = True
+    except Exception as err:
+        print("执行MySQL: %s 时出错: \n%s" % (sql, err))
+        res = False
+    finally:
+        cur.close()
+        conn.commit()
+        conn.close()
+        return res
+
+
+"""
+    用户查看所属社区所有帮忙请求信息，返回查询结果
+    参数顺序：
+    cmty
+    返回值：
+    成功返回list[req_cmty,req_id,req_uid,req_type,req_topic,req_idct,req_nop,end_time,req_photo,req_time,m_time,req_status]
     失败返回false
 """
-def user_info_modify(arg_list):
-    return tb.table_update(1, arg_list)
+def user_request_cmty_info(cmty):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = f'SELECT * ' \
+          f'FROM tbRequest WHERE req_cmty=\'{cmty}\''
+    res = cur.execute(sql)
+    if res == 0:
+        print("该社区未发布请求信息！")
+        return False
+    else:
+        tup_list = []
+        for tup in cur.fetchall():
+            tup_list.append(list(tup))
+        return tup_list
 
 
-# 初始化数据库连接，使用pymysql模块
-# MySQL的用户：root, 密码:123456, 端口：3306,数据库：ltedb
+"""
+    用户查看某一帮忙请求具体信息，返回查询结果
+    参数顺序：
+    req_id
+    返回值：
+    成功返回list[req_cmty,req_id,req_uid,req_type,req_topic,req_idct,req_nop,end_time,req_photo,req_time,m_time,req_status]
+    失败返回false
+"""
+def user_request_spec_info(req_id):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = f'SELECT * ' \
+          f'FROM tbRequest WHERE req_id=\'{req_id}\''
+    res = cur.execute(sql)
+    if res == 0:
+        print(f"请求信息{req_id}不存在！")
+        return False
+    else:
+        tup = cur.fetchone()
+        return list(tup)
+
+
 
 if __name__ == '__main__':
-    # print(user_register_check('user123'))
-    # print(user_register(['user123', 'user123', 1, '李四', 0, '130984200008270016', '', 1, '', '河北', '志愿者']))
-    # login_res = user_login(['admin', 'admin'])
-    # print(login_res)
-    # print(user_info(login_res[0]))
-    # user_info_modify(['u001', 'admin', '18610750900', '测试用，管理员用户'])
+    print("request")
+    # user_request_release(['光盘行动', 'UR101', '3', '线上演讲志愿者', '线上演讲志愿者，招募志愿者', 5, '2022-1-20', ''])
+    # user_request_release(['关爱拉人', 'UR101', '3', '社区表演志愿者', '社区表演志愿者，招募志愿者', 12, '2022-1-23', ''])
+    # print(user_request_info('UR101'))
+    # print(user_request_delete('RQ101'))
+    # user_request_modify(['RQ101', 2, '上下班搭车', '上下班搭车,找人', 3, '2021-2-01', ''])
+    # print(user_request_cmty_info('垃圾回收'))
+    # print(user_request_cmty_info('志愿者'))
+    # print(user_request_spec_info('RQ101'))
