@@ -30,8 +30,8 @@ sql_create = [
             u_idct       VARCHAR (300) NOT NULL,
             r_city       VARCHAR (30) NOT NULL,
             r_cmty       VARCHAR (30) NOT NULL,
-            r_time       TIMESTAMP NOT NULL,
-            m_time       TIMESTAMP NOT NULL,
+            r_time       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            m_time       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY(u_id)              
         );
         """,
@@ -46,8 +46,8 @@ sql_create = [
             req_nop      INT NOT NULL DEFAULT 1,
             end_time     TIMESTAMP NOT NULL,
             req_photo    VARCHAR (100) NULL,
-            req_time     TIMESTAMP NOT NULL,
-            m_time       TIMESTAMP NOT NULL,
+            req_time     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            m_time       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             req_status   INT NOT NULL,
             PRIMARY KEY(req_id)   
         );      
@@ -58,8 +58,8 @@ sql_create = [
             req_id       VARCHAR (50) NOT NULL,
             rsp_uid      VARCHAR (50) NOT NULL,  
             rsp_idct     VARCHAR (300) UNIQUE KEY,
-            rsp_time     TIMESTAMP NOT NULL,
-            m_time       TIMESTAMP NOT NULL,
+            rsp_time     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            m_time       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             rsp_status   INT NOT NULL,
             PRIMARY KEY(rsp_id)
         );    
@@ -69,7 +69,7 @@ sql_create = [
             req_id       VARCHAR (50) NOT NULL,
             req_uid      VARCHAR (50) NOT NULL,
             rsp_uid      VARCHAR (50) NOT NULL,  
-            agc_time     TIMESTAMP NOT NULL,
+            agc_time     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             req_fee      INT NOT NULL,
             rsp_fee      INT NOT NULL,
             agc_fee      INT NOT NULL,
@@ -79,11 +79,11 @@ sql_create = [
     """
         (
             n_month        TIMESTAMP NOT NULL,
-            region       VARCHAR(50) NOT NULL,
-            cmty         VARCHAR(50) NOT NULL,
-            req_type         VARCHAR (50) NOT NULL,
-            num          INT NOT NULL,
-            total_fee    INT NOT NULL,
+            region         VARCHAR(50) NOT NULL,
+            cmty           VARCHAR(50) NOT NULL,
+            req_type       VARCHAR (50) NOT NULL,
+            num            INT NOT NULL,
+            total_fee      INT NOT NULL,
             PRIMARY KEY(n_month,region,cmty)
         );
     """,
@@ -94,26 +94,21 @@ sql_insert = [
         insert into 
         tbUser(u_id,u_name,u_pwd,u_type,r_name,c_type,c_num,p_num,u_level,u_idct,r_city,r_cmty,r_time,m_time) 
         values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        ON DUPLICATE KEY UPDATE 
-        u_pwd = VALUES(u_pwd), p_num = VALUES(p_num)
     """,
     """
         insert into 
         tbRequest(req_cmty,req_id,req_uid,req_type,req_topic,req_idct,req_nop,end_time,req_photo,req_time,m_time,req_status) 
         values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        ON DUPLICATE KEY UPDATE 
     """,
     """
         insert into 
         tbResponse(rsp_id,req_id,rsp_uid,rsp_idct,rsp_time,m_time,rsp_status)
         values(%s,%s,%s,%s,%s,%s,%s)
-        ON DUPLICATE KEY UPDATE 
     """,
     """
         insert into 
         tbSuccess(req_id,req_uid,rsp_uid,agc_time,req_fee,rsp_fee,agc_fee)
         values(%s,%s,%s,%s,%s,%s,%s)
-        ON DUPLICATE KEY UPDATE 
     """,
     """
         insert into tbProfit(n_month,region,cmty,req_type,num,total_fee)

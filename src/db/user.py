@@ -4,7 +4,7 @@ import pymysql
 from sqlalchemy import create_engine
 import time
 
-from db import var
+from src.db import var
 '''
     用户登录函数:用户发出注册请求时使用
     参数:
