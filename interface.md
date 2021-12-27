@@ -1,7 +1,7 @@
 # 一、普通用户
 
 
-## （1）普通用户注册
+## （1）用户注册
 
 接口 URL：```/api/ordin/register```
 
@@ -87,7 +87,7 @@
 | r_time   | timestamp | 注册时间                                                     |
 | m_time   | timestamp | 修改时间                                                     |
 
-## （4）普通用户修改信息
+## （4）普通用户修改基本信息
 
 接口 URL：```/api/ordin/modify```
 
@@ -110,7 +110,9 @@
 |---|---|---|
 |m_result|Boolean|成功为``True``，失败为``False``|
 
-## （5）用户发布请求信息
+# 二、请求类
+
+## （1）用户发布请求信息
 
 接口 URL：```/api/ordin/request/release```
 
@@ -139,7 +141,7 @@
 |req_result|boolean|发布结果，成功为``True``，失败为``False``|
 |req_id|string|请求标识|
 
-## （6）用户查询自己发布的所有请求信息
+## （2）用户查询自己发布的所有请求信息
 
 接口 URL：```/api/ordin/request/info```
 
@@ -171,7 +173,7 @@
 |m_time|string|修改时间|
 |req_status|int|状态|
 
-## （7）用户删除（已发布还没有响应者）的请求信息
+## （3）用户删除（已发布还没有响应者）的请求信息
 
 接口 URL：```/api/ordin/request/delete```
 
@@ -191,7 +193,7 @@
 | ---------- | ------- | ----------------------------------------- |
 | del_result | boolean | 删除结果，成功为``True``，失败为``False`` |
 
-## （8）用户修改（已发布还没响应者）的请求信息
+## （4）用户修改（已发布还没响应者）的请求信息
 
 接口 URL：```/api/ordin/request/modify```
 
@@ -217,54 +219,7 @@
 | -------- | ------- | ----------------------------------------- |
 | m_result | boolean | 修改结果，成功为``True``，失败为``False`` |
 
-## （9）用户查看某一请求信息的所有帮忙信息
-
-接口 URL：```/api/ordin/request/response_info```
-
-请求方法：```GET```
-
-编码方式：```application/x-www-form-urlencoded```
-
-### 请求参数
-
-| 参数名称 | 必选 | 类型   | 说明     |
-| -------- | ---- | ------ | -------- |
-| req_id   | 是   | string | 请求标识 |
-
-### 返回JSON
-
-|属性|类型|说明|
-|---|---|---|
-|r_result|boolean|查询结果|
-|rsp_id|string|响应标识|
-|req_id|string|请求标识|
-|rsp_uid|string|响应用户标识|
-|rsp_idct|string|响应描述|
-|rsp_time|timestamp|响应时间|
-|rsp_status|int|状态（0：待接受 / 1：同意 / 2：拒绝 / 3：取消）|
-
-## （10）用户处理响应信息
-
-接口 URL：```/api/ordin/request/opt_response```
-
-请求方法：```POST```
-
-编码方式：```application/x-www-form-urlencoded```
-
-### 请求参数
-
-|参数名称|必选|类型|说明|
-|----|----|----|----|
-|req_id|是|string|响应标识|
-|option|是|boolean|是否接受响应，接受为``True``，拒绝为``False``|
-
-### 返回JSON
-
-| 属性       | 类型    | 说明                                      |
-| ---------- | ------- | ----------------------------------------- |
-| opt_result | boolean | 处理结果，成功为``True``，失败为``False`` |
-
-## （11）用户查看所属社区所有帮忙请求信息
+## （5）用户查看所属社区所有帮忙请求信息
 
 接口 URL：```/api/ordin/response/request_info```
 
@@ -274,27 +229,27 @@
 
 ### 请求参数
 
-|参数名称|必选|类型|说明|
-|----|----|----|----|
-|community|是|string|用户所属社区|
+| 参数名称  | 必选 | 类型   | 说明         |
+| --------- | ---- | ------ | ------------ |
+| community | 是   | string | 用户所属社区 |
 
 ### 返回JSON
 
-|属性|类型|说明|
-|---|---|---|
-|r_result|boolean|查询结果|
-| req_id     |string|请求标识|
-| req_uid    |string|发布用户标识|
-|req_type|string|请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者）|
-|req_topic|string|请求主题|
-|req_idct|string|请求描述|
-|req_nop|int|请求人数|
-|end_time|timestamp|请求结束日期|
-|req_photo|string|请求介绍照片|
-|req_time|timestamp|请求创建时间|
-|req_status|string|状态|
+| 属性       | 类型      | 说明                                                         |
+| ---------- | --------- | ------------------------------------------------------------ |
+| r_result   | boolean   | 查询结果                                                     |
+| req_id     | string    | 请求标识                                                     |
+| req_uid    | string    | 发布用户标识                                                 |
+| req_type   | string    | 请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者） |
+| req_topic  | string    | 请求主题                                                     |
+| req_idct   | string    | 请求描述                                                     |
+| req_nop    | int       | 请求人数                                                     |
+| end_time   | timestamp | 请求结束日期                                                 |
+| req_photo  | string    | 请求介绍照片                                                 |
+| req_time   | timestamp | 请求创建时间                                                 |
+| req_status | string    | 状态                                                         |
 
-## （11）用户查看某一帮忙请求具体信息
+## （6）用户查看某一帮忙请求具体信息
 
 接口 URL：```/api/ordin/request/spec_info```
 
@@ -323,7 +278,58 @@
 | req_time   | timestamp | 请求创建时间                                                 |
 | req_status | string    | 状态                                                         |
 
-## （12）用户提交响应信息
+## 
+
+# 三、帮忙响应类
+
+## （1）用户查看某一请求信息的所有帮忙信息
+
+接口 URL：```/api/ordin/request/response_info```
+
+请求方法：```GET```
+
+编码方式：```application/x-www-form-urlencoded```
+
+### 请求参数
+
+| 参数名称 | 必选 | 类型   | 说明     |
+| -------- | ---- | ------ | -------- |
+| req_id   | 是   | string | 请求标识 |
+
+### 返回JSON
+
+|属性|类型|说明|
+|---|---|---|
+|r_result|boolean|查询结果|
+|rsp_id|string|响应标识|
+|req_id|string|请求标识|
+|rsp_uid|string|响应用户标识|
+|rsp_idct|string|响应描述|
+|rsp_time|timestamp|响应时间|
+|rsp_status|int|状态（0：待接受 / 1：同意 / 2：拒绝 / 3：取消）|
+
+## （2）用户处理响应信息
+
+接口 URL：```/api/ordin/request/opt_response```
+
+请求方法：```POST```
+
+编码方式：```application/x-www-form-urlencoded```
+
+### 请求参数
+
+|参数名称|必选|类型|说明|
+|----|----|----|----|
+|req_id|是|string|响应标识|
+|option|是|boolean|是否接受响应，接受为``True``，拒绝为``False``|
+
+### 返回JSON
+
+| 属性       | 类型    | 说明                                      |
+| ---------- | ------- | ----------------------------------------- |
+| opt_result | boolean | 处理结果，成功为``True``，失败为``False`` |
+
+## （3）用户提交响应信息
 
 接口 URL：```/api/ordin/response/respond```
 
@@ -346,7 +352,7 @@
 |rsp_id|string|响应标识|
 |rsp_result|boolean|发布响应信息结果，成功为``True``，失败为``False``|
 
-## （13）用户查看自己发布的响应信息
+## （4）用户查看自己发布的响应信息
 
 接口 URL：```/api/ordin/response/response_info```
 
@@ -372,7 +378,7 @@
 |m_time|timestamp|响应修改时间|
 |rsp_status|int|状态|
 
-## （14）用户修改还未被接受的响应信息
+## （5）用户修改还未被接受的响应信息
 
 接口 URL：```/api/user/response/modify```
 
@@ -393,7 +399,7 @@
 |---|---|---|
 |m_result|boolean|修改响应信息结果，成功为``True``，失败为``False``|
 
-## （15）用户删除还未被接受的响应信息
+## （6）用户删除还未被接受的响应信息
 
 接口 URL：```/api/user/response/delete```
 
@@ -413,7 +419,7 @@
 |---|---|---|
 |del_result|boolean|删除响应信息结果，成功为``True``，失败为``False``|
 
-## （16）用户查询自己所有已经被接受的请求响应信息
+## （7）用户查询自己所有已经被接受的请求响应信息
 
 接口 URL：```/api/user/response/accepted```
 
