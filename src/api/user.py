@@ -24,13 +24,13 @@ def login():
     res = user_login(arg_list)
     if not res:
         return {
-            "r_result": False,
+            "result": False,
             "u_id": None,
             "u_type": None,
         }
     else:
         return {
-            "r_result": True,
+            "result": True,
             "u_id": res[0],
             "u_type": res[1],
         }
