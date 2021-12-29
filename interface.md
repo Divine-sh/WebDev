@@ -1,9 +1,9 @@
-# 一、普通用户
+# 一、用户类
 
 
 ## （1）用户注册
 
-接口 URL：```/api/ordin/register```
+接口 URL：```/api/user/register```
 
 请求方法：```POST```
 
@@ -34,7 +34,7 @@
 
 ## （2）用户登录
 
-接口 URL：```/api/ordin/login```
+接口 URL：```/api/user/login```
 
 请求方法：```POST```
 
@@ -57,7 +57,7 @@
 
 ## （3）查询用户个人信息
 
-接口 URL：```/api/ordin/info```
+接口 URL：```/api/user/info```
 
 请求方法：```GET```
 
@@ -87,9 +87,9 @@
 | r_time   | timestamp | 注册时间                                                     |
 | m_time   | timestamp | 修改时间                                                     |
 
-## （4）普通用户修改基本信息
+## （4）用户修改基本信息
 
-接口 URL：```/api/ordin/modify```
+接口 URL：```/api/user/modify```
 
 请求方法：```POST```
 
@@ -320,7 +320,10 @@
 
 |参数名称|必选|类型|说明|
 |----|----|----|----|
-|req_id|是|string|响应标识|
+|req_id|是|string|请求标识|
+|req_uid|是|string|请求用户标识|
+|rsp_id|是|string|响应标识|
+|rsp_uid|是|string|响应用户标识|
 |option|是|boolean|是否接受响应，接受为``True``，拒绝为``False``|
 
 ### 返回JSON

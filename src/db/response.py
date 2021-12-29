@@ -205,23 +205,64 @@ def user_response_accepted(rsp_uid):
         1.拒绝，被拒绝的响应信息状态修改
         2.同意，帮忙请求信息和相应信息对应状态修改，修改帮忙成功明细表
     参数顺序：arg_list(list)
-    req_id, option
+    req_id,req_uid,rsp_id,rsp_uid,option
     返回值：
     成功返回True
     失败返回False
 """
 def user_opt_response(arg_list):
-    return
-
-
+    # 提取参数
+    req_id = arg_list[0]
+    req_uid = arg_list[1]
+    rsp_id = arg_list[2]
+    rsp_uid = arg_list[3]
+    option = arg_list[4]
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # 获取当前时间
+    now = datetime.datetime.now()
+    now = now.strftime("%Y-%m-%d %H:%M:%S")
+    # 判断option
+    if option:  # 接收响应
+        sql1 = f'UPDATE tbResponse SET rsp_status=1 WHERE rsp_id=\'{rsp_id}\''
+        sql2 = f'INSERT INTO tbSuccess(req_id,req_uid,rsp_id,rsp_uid,agc_time) ' \
+               f'VALUES (%s,%s,%s,%s,%s)'
+        try:
+            cur.execute(sql1)
+            print(f"被接受的响应信息{rsp_id}状态修改")
+            cur.execute(sql2, (req_id, req_uid, rsp_id, rsp_uid, now))
+            print(f"帮忙成功表中添加记录")
+            res = True
+        except Exception as err:
+            print("执行MySQL语句时出错: \n%s" % err)
+            res = False
+    else:  # 拒绝响应
+        sql = f'UPDATE tbResponse SET rsp_status=2 WHERE rsp_id=\'{rsp_id}\''
+        try:
+            cur.execute(sql)
+            print(f"被拒绝的响应信息{rsp_id}状态修改")
+            res = True
+        except Exception as err:
+            print("执行MySQL: %s 时出错: \n%s" % (sql, err))
+            res = False
+    cur.close()
+    conn.commit()
+    conn.close()
+    return res
 
 
 if __name__ == '__main__':
+    print("response")
     # user_response_release(['RQ103', 'UR100', '会舞蹈才艺'])
     # user_response_release(['RQ101', 'UR100', '上班路线相同'])
     # user_response_release(['RQ101', 'UR102', '上班路线相同'])
     # print(user_response_info('UR100'))
-    user_response_delete('RS100')
+    # user_response_delete('RS100')
     # user_response_modify(['RS101', '上班路线相同,有搭车意向'])
     # print(user_request_response_info('RQ101'))
     # print(user_response_accepted('UR100'))
+    # user_opt_response(['RQ101', 'UR101', 'RS102', 'UR102', False])
+    # user_opt_response(['RQ101', 'UR101', 'RS102', 'UR102', True])
+    # user_opt_response(['RQ101', 'UR101', 'RS101', 'UR100', True])

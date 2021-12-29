@@ -234,7 +234,7 @@ if __name__ == '__main__':
 
     # for i in range(1, 6):
     #     table_create(i)
-
+    # table_create(4)
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     # table_insert_tuple(1, ('UR001', 'admin', 'admin', 0, '张三', 0, '110693184506080045', '18610750900', 0, '管理员用户，测试用', '北京', '测试社区', now, now))

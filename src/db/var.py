@@ -68,12 +68,10 @@ sql_create = [
         (
             req_id       VARCHAR (50) NOT NULL,
             req_uid      VARCHAR (50) NOT NULL,
+            rsp_id       VARCHAR (50) NOT NULL,
             rsp_uid      VARCHAR (50) NOT NULL,  
             agc_time     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            req_fee      INT NOT NULL,
-            rsp_fee      INT NOT NULL,
-            agc_fee      INT NOT NULL,
-            PRIMARY KEY(req_id,rsp_uid)
+            PRIMARY KEY(req_id,rsp_id)
         );
     """,
     """
