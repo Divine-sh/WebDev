@@ -24,7 +24,7 @@ def user_register_check(u_name):
     # 如果用户名存在，返回1，否则返回0
     res = cur.execute(f"SELECT u_id,u_name FROM tbUser WHERE u_name=\'{u_name}\'")
     # 返回结果
-    return bool(res)
+    return not bool(res)
 
 
 """
@@ -32,9 +32,12 @@ def user_register_check(u_name):
     参数顺序: arg_list(list)
     u_name, u_pwd, u_type, r_name, c_type, c_num, p_num, u_level, u_idct，r_city，r_cmty
     返回值: string
-    成功返回u_id,失败返回'u0'
+    成功返回u_id,失败返回'UR0'
 """
 def user_register(arg_list):
+    # 先做注册检查
+    if not user_register_check(arg_list[0]):
+        return 'UR0'
     # tbUser表
     table = 0
     # 表名
@@ -67,7 +70,7 @@ def user_register(arg_list):
         res = u_id
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
-        rse = 'UR0'
+        res = 'UR0'
     finally:
         cur.close()
         conn.commit()
@@ -133,7 +136,6 @@ def user_info(u_id):
 """
 def user_info_modify(arg_list):
     return tb.table_update(1, arg_list)
-
 
 
 if __name__ == '__main__':

@@ -44,8 +44,8 @@
 
 | 参数名称 | 必选 | 类型   | 说明   |
 | -------- | ---- | ------ | ------ |
-| username | 是   | string | 用户名 |
-| password | 是   | string | 密码   |
+| u_name   | 是   | string | 用户名 |
+| u_pwd    | 是   | string | 密码   |
 
 ### 返回JSON
 
@@ -114,7 +114,7 @@
 
 ## （1）用户发布请求信息
 
-接口 URL：```/api/ordin/request/release```
+接口 URL：```/api/user/request/release```
 
 请求方法：```POST```
 
@@ -143,7 +143,7 @@
 
 ## （2）用户查询自己发布的所有请求信息
 
-接口 URL：```/api/ordin/request/info```
+接口 URL：```/api/user/request/info```
 
 请求方法：```GET```
 
@@ -175,7 +175,7 @@
 
 ## （3）用户删除（已发布还没有响应者）的请求信息
 
-接口 URL：```/api/ordin/request/delete```
+接口 URL：```/api/user/request/delete```
 
 请求方法：```POST```
 
@@ -195,7 +195,7 @@
 
 ## （4）用户修改（已发布还没响应者）的请求信息
 
-接口 URL：```/api/ordin/request/modify```
+接口 URL：```/api/user/request/modify```
 
 请求方法：```POST```
 
@@ -221,7 +221,7 @@
 
 ## （5）用户查看所属社区所有帮忙请求信息
 
-接口 URL：```/api/ordin/response/request_info```
+接口 URL：```/api/user/response/request_info```
 
 请求方法：```GET```
 
@@ -251,7 +251,7 @@
 
 ## （6）用户查看某一帮忙请求具体信息
 
-接口 URL：```/api/ordin/request/spec_info```
+接口 URL：```/api/user/request/spec_info```
 
 请求方法：```GET```
 
@@ -284,7 +284,7 @@
 
 ## （1）用户查看某一请求信息的所有帮忙信息
 
-接口 URL：```/api/ordin/request/response_info```
+接口 URL：```/api/user/request/response_info```
 
 请求方法：```GET```
 
@@ -310,7 +310,7 @@
 
 ## （2）用户处理响应信息
 
-接口 URL：```/api/ordin/request/opt_response```
+接口 URL：```/api/user/request/opt_response```
 
 请求方法：```POST```
 
@@ -334,7 +334,7 @@
 
 ## （3）用户提交响应信息
 
-接口 URL：```/api/ordin/response/respond```
+接口 URL：```/api/user/response/respond```
 
 请求方法：```POST```
 
@@ -357,7 +357,7 @@
 
 ## （4）用户查看自己发布的响应信息
 
-接口 URL：```/api/ordin/response/response_info```
+接口 URL：```/api/user/response/response_info```
 
 请求方法：```GET```
 
