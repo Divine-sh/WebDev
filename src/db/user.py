@@ -32,12 +32,12 @@ def user_register_check(u_name):
     参数顺序: arg_list(list)
     u_name, u_pwd, u_type, r_name, c_type, c_num, p_num, u_level, u_idct，r_city，r_cmty
     返回值: string
-    成功返回u_id,失败返回'UR0'
+    成功返回[u_id,remark],失败返回['UR0',remark]
 """
 def user_register(arg_list):
     # 先做注册检查
     if not user_register_check(arg_list[0]):
-        return 'UR0'
+        return ['UR0', '用户名已存在']
     # tbUser表
     table = 0
     # 表名
@@ -68,22 +68,24 @@ def user_register(arg_list):
         cur.execute(sql_ins, tp)
         print("执行MySQL插入语句成功")
         res = u_id
+        remark = '注册成功'
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
         res = 'UR0'
+        remark = err
     finally:
         cur.close()
         conn.commit()
         conn.close()
-        return res
+        return [res, remark]
 
 """
     用户登录, 返回登录结果
     参数顺序: arg_list(list)
     u_name, u_pwd
     返回值: 
-    成功返回list[u_id, u_type]
-    失败返回false
+    成功返回list[True, u_id, u_type]
+    失败返回list[False, None, None]
 """
 def user_login(arg_list):
     # 提取参数
@@ -97,10 +99,10 @@ def user_login(arg_list):
     res = cur.execute(sql)
     if res == 0:
         print("用户名不存在或密码错误！")
-        return False
+        return [False, None, None]
     elif res == 1:
         tup = cur.fetchone()
-        return list(tup)
+        return [True] + list(tup)
 
 
 """

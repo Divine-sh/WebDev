@@ -15,12 +15,12 @@
 |----|----|----|----|
 |u_name|是|string|用户名|
 |u_pwd|是|string|登录密码|
-|u_type|是|int|用户类型，能注册的都是普通用户，此项为1|
+|u_type|是|int|用户类型，系统管理员(0) / 普通用户(1)|
 |r_name|是|string|用户姓名|
 |c_type|是|string|证件类型（中华人民共和国居民身份证，台湾居民往来大陆通行证，港澳居民来往内地通行证，军人证件，护照，香港身份证，澳门身份证）|
 |c_num|是|string|证件号码|
 |p_num|否|string|电话号码（11位）|
-|u_level|是|int|默认为一般用户，此项为1|
+|u_level|是|int|用户级别，VIP(0) / 一般(1)|
 |u_idct|否|string|用户简介|
 |r_city|是|string|注册城市（要和证件匹配）|
 |r_cmty|是|string|注册社区|
@@ -31,6 +31,7 @@
 |---|---|---|
 |result|boolean|成功为``True``，失败为``False``|
 |u_id|string|注册用户标识|
+|remark|string|备注，例如：注册失败原因|
 
 ## （2）用户登录
 

@@ -6,31 +6,26 @@ user = Blueprint("user", __name__)
 
 @user.route("/api/user/register", methods=["POST"])
 def register():
-
+    print(request.json)  # dict
+    body = request.json
+    arg_list = list(body.values())
+    res = user_register(arg_list)
     return {
-        "success":
-            True if user_signin(request.form["username"],
-                                request.form["password"], 2) else False
+        "result": False if res[0] == 'UR0' else True,
+        "u_id": res[0],
+        "remark": res[1],
     }
+
 
 
 @user.route("/api/user/login", methods=["POST"])
 def login():
-    print(request.json)  # dict
     body = request.json
-    arg_list = []
-    arg_list.append(body['u_name'])
-    arg_list.append(body['u_pwd'])
+    arg_list = list(body.values())
+    print(arg_list)
     res = user_login(arg_list)
-    if not res:
-        return {
-            "result": False,
-            "u_id": None,
-            "u_type": None,
-        }
-    else:
-        return {
-            "result": True,
-            "u_id": res[0],
-            "u_type": res[1],
-        }
+    return {
+        "result": res[0],
+        "u_id": res[1],
+        "u_type": res[2],
+    }
