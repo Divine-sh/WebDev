@@ -3,3 +3,5 @@ dict1 = {
     "u_pwd": "admin"
 }
 print(list(dict1.values()))
+print([False] + [None for i in range(6)])
+print(dict(list["a","b","c"]))

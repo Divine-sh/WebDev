@@ -72,7 +72,7 @@ def user_register(arg_list):
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
         res = 'UR0'
-        remark = err
+        remark = str(err)
     finally:
         cur.close()
         conn.commit()
@@ -109,8 +109,8 @@ def user_login(arg_list):
     用户查询基本信息, 返回查询结果
     参数顺序: u_id
     返回值: 
-    成功返回list[u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
-    失败返回false
+    成功返回list[True, u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+    失败返回lsit[false, None i in range()]
 """
 def user_info(u_id):
     # 连接数据库
@@ -122,10 +122,10 @@ def user_info(u_id):
     res = cur.execute(sql)
     if res == 0:
         print("用户标识不存在！")
-        return False
+        return [False] + [None for i in range(12)]
     elif res == 1:
         tup = cur.fetchone()
-        return list(tup)
+        return [True] + list(tup)
 
 
 """

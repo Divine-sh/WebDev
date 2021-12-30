@@ -151,8 +151,8 @@ def user_response_modify(arg_list):
     参数顺序：
     req_id
     返回值：
-    成功返回list[list[]]
-    失败返回false
+    成功返回[True, list[list[]]]
+    失败返回[false, None]
 """
 def user_request_response_info(req_id):
     # 连接数据库
@@ -164,12 +164,12 @@ def user_request_response_info(req_id):
     res = cur.execute(sql)
     if res == 0:
         print(f"请求信息{req_id}不存在！")
-        return False
+        return [False, None]
     else:
         tup_list = []
         for tup in cur.fetchall():
             tup_list.append(list(tup))
-        return tup_list
+        return [True, tup_list]
 
 
 """

@@ -3,10 +3,10 @@ import math
 import pandas as pd
 
 from flask import Flask, render_template, request
-from flask_sockets import Sockets
-from src.api.user import user
-from gevent.pywsgi import WSGIServer
-from geventwebsocket.handler import WebSocketHandler
+from flask_cors import CORS
+from src.api.user_api import user
+from src.api.request_api import req
+from src.api.response_api import rsp
 
 app = Flask(__name__,
             template_folder="public",
@@ -14,13 +14,9 @@ app = Flask(__name__,
             static_url_path="/")
 
 app.register_blueprint(user)
-
+app.register_blueprint(req)
+app.register_blueprint(rsp)
+CORS(app, supports_credentials=True)
 
 if __name__ == "__main__":
-    server = WSGIServer(
-        ('127.0.0.1', 3000),
-        app,
-        handler_class=WebSocketHandler,
-    )
-    print("server start ...")
-    server.serve_forever()
+    app.run(host='0.0.0.0', port=3000, debug=True)

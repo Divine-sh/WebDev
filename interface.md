@@ -132,7 +132,6 @@
 |req_idct|是|string|请求描述|
 |req_nop|是|int|请求人数|
 |end_time|是|string|请求结束日期（yyyy-mm-dd）|
-|req_time|是|timestamp|发起请求时间|
 |req_photo|否|string|请求介绍照片|
 
 ### 返回JSON
@@ -141,6 +140,7 @@
 |---|---|---|
 |result|boolean|发布结果，成功为``True``，失败为``False``|
 |req_id|string|请求标识|
+|remark|string|备注，发布失败原因|
 
 ## （2）用户查询自己发布的所有请求信息
 
@@ -157,6 +157,13 @@
 | req_uid  | 是   | string | 用户标识 |
 
 ### 返回JSON
+
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_arr | json    | json数组 |
+
+### JSON数组格式
 
 |属性|类型|说明|
 |---|---|---|
@@ -236,9 +243,15 @@
 
 ### 返回JSON
 
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_arr | json    | json数组 |
+
+###  JSON数组格式
+
 | 属性       | 类型      | 说明                                                         |
 | ---------- | --------- | ------------------------------------------------------------ |
-| result     | boolean   | 查询结果                                                     |
 | req_id     | string    | 请求标识                                                     |
 | req_uid    | string    | 发布用户标识                                                 |
 | req_type   | string    | 请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者） |
@@ -266,9 +279,15 @@
 
 ### 返回JSON
 
+| 属性   | 类型    | 说明     |
+| ------ | ------- | -------- |
+| result | boolean | 查询结果 |
+| info   | json    | json对象 |
+
+### JSON对象格式
+
 | 属性       | 类型      | 说明                                                         |
 | ---------- | --------- | ------------------------------------------------------------ |
-| result     | boolean   | 查询结果                                                     |
 | req_uid    | string    | 发布用户标识                                                 |
 | req_type   | string    | 请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者） |
 | req_topic  | string    | 请求主题                                                     |
@@ -299,9 +318,15 @@
 
 ### 返回JSON
 
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_arr | json    | json数组 |
+
+###  JSON数组格式
+
 |属性|类型|说明|
 |---|---|---|
-|result|boolean|查询结果|
 |rsp_id|string|响应标识|
 |req_id|string|请求标识|
 |rsp_uid|string|响应用户标识|
