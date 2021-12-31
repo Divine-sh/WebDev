@@ -1,79 +1,69 @@
 from flask import Blueprint, request
-from src.db.user import *
-from src.db.common import *
-import time
+from src.db.admin import *
 
 admin = Blueprint("admin", __name__)
 
 
-@admin.route("/api/admin/login", methods=["POST"])
-def login():
+@admin.route("/api/admin/request/user_info", methods=["GET"])
+def requestUserInfo():
+    arg = request.args.get("req_id")
+    print(arg)
+    res = admin_reqid_user_info(arg)
+    keys = [
+        "u_name",
+        "u_type",
+        "r_name",
+        "c_type",
+        "c_num",
+        "p_num",
+        "u_level",
+        "u_idct",
+        "r_city",
+        "r_cmty",
+        "r_time",
+        "m_time",
+    ]
     return {
-        "success":
-            True if user_signin(request.form["username"],
-                                request.form["password"], 1) else False
+        "result": False if not res[0] else True,
+        "info_obj": None if not res[0] else dict(zip(keys, res[1])),
     }
 
 
-@admin.route("/api/admin/passwd", methods=["POST"])
-def passwd():
+@admin.route("/api/admin/response/user_info", methods=["GET"])
+def responseUserInfo():
+    arg = request.args.get("rsp_id")
+    print(arg)
+    res = admin_rspid_user_info(arg)
+    keys = [
+        "u_name",
+        "u_type",
+        "r_name",
+        "c_type",
+        "c_num",
+        "p_num",
+        "u_level",
+        "u_idct",
+        "r_city",
+        "r_cmty",
+        "r_time",
+        "m_time",
+    ]
     return {
-        "success":
-            True if user_change_passwd(request.form["username"],
-                                       request.form["oldPasswd"],
-                                       request.form["newPasswd"], 1) else False
+        "result": False if not res[0] else True,
+        "info_obj": None if not res[0] else dict(zip(keys, res[1])),
     }
 
 
-@admin.route("/api/admin/userList", methods=["GET"])
-def get_user_list():
-    ls = user_get_list(2)
-    ret = []
-    for info in ls:
-        ret.append({"username": info[0], "time": str(info[1])[:10]})
-    return {"users": ret}
-
-
-@admin.route("/api/admin/createUser", methods=["POST"])
-def create_user():
+@admin.route("/api/admin/fee", methods=["GET"])
+def adminFee():
+    res = admin_agency_fee()
     return {
-        "success":
-            True if user_add(request.form["username"], request.form["password"],
-                             2) else False
+        "agency_fee": res
     }
 
 
-@admin.route("/api/admin/removeUser", methods=["POST"])
-def remove_user():
-    return {
-        "success": True if user_delete(request.form["username"], 2) else False
-    }
+
+# @admin.route("/api/admin/requset_info", methods=["GET"])
+# @admin.route("/api/admin/response_info", methods=["GET"])
 
 
-@admin.route("/api/admin/DBInfo", methods=["GET"])
-def get_db_info():
-    return db_get_inf()
-    # return {
-    #     "host": "127.0.0.1",
-    #     "port": 3306,
-    #     "db": "ltdb",
-    #     "username": "root",
-    #     "password": "123456",
-    #     "interactiveTimeout": 0,
-    #     "waitTimeout": 0,
-    #     "partition": "",
-    #     "queryCacheSize": ""
-    # }
-
-
-@admin.route("/api/admin/setTimeout", methods=["POST"])
-def set_timeout():
-    db_change_timeout(request.form["interactiveTimeout"],
-                      request.form["waitTimeout"])
-    return {"success": True}
-
-
-@admin.route("/api/admin/setCache", methods=["POST"])
-def set_query_cache_size():
-    db_change_cache_size(request.form["queryCacheSize"])
-    return {"success": True}

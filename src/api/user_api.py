@@ -36,20 +36,23 @@ def userPerInfo():
     # print(request.args)
     print(arg)
     res = user_info(arg)
+    keys = [
+        "u_name",
+        "u_type",
+        "r_name",
+        "c_type",
+        "c_num",
+        "p_num",
+        "u_level",
+        "u_idct",
+        "r_city",
+        "r_cmty",
+        "r_time",
+        "m_time",
+    ]
     return {
-        "result": res[0],
-        "u_name": res[1],
-        "u_type": res[2],
-        "r_name": res[3],
-        "c_type": res[4],
-        "c_num": res[5],
-        "p_num": res[6],
-        "u_level": res[7],
-        "u_idct": res[8],
-        "r_city": res[9],
-        "r_cmty": res[10],
-        "r_time": res[11],
-        "m_time": res[12],
+        "result": False if not res[0] else True,
+        "info_obj": None if not res[0] else dict(zip(keys, res[1])),
     }
 
 

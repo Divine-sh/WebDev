@@ -14,8 +14,9 @@ import datetime
     参数顺序：
         req_id
     返回值：
-        成功返回list[]
-        失败返回False
+        成功返回list[True, list(tup)]
+            list(tup) = u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+        失败返回lsit[false, None]
 """
 def admin_reqid_user_info(req_id):
     # 连接数据库
@@ -25,13 +26,17 @@ def admin_reqid_user_info(req_id):
     # sql语句
     sql1 = f'SELECT req_uid FROM tbRequest WHERE req_id=\'{req_id}\''
     try:
-        cur.execute(sql1)
+        num = cur.execute(sql1)
         print("执行MySQL查询语句成功")
-        u_id = cur.fetchone()[0]
-        res = user.user_info(u_id)
+        if num == 0:
+            print(f"req_id({req_id})不存在!")
+            res = [False, None]
+        else:
+            u_id = cur.fetchone()[0]
+            res = user.user_info(u_id)
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql1, err))
-        res = False
+        res = [False, None]
     finally:
         cur.close()
         conn.commit()
@@ -44,8 +49,9 @@ def admin_reqid_user_info(req_id):
     参数顺序：
         rsp_id
     返回值：
-        成功返回list[]
-        失败返回False
+        成功返回list[True, list(tup)]
+            list(tup) = u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+        失败返回lsit[false, None]
 """
 def admin_rspid_user_info(rsp_id):
     # 连接数据库
@@ -55,13 +61,17 @@ def admin_rspid_user_info(rsp_id):
     # sql语句
     sql1 = f'SELECT rsp_uid FROM tbResponse WHERE rsp_id=\'{rsp_id}\''
     try:
-        cur.execute(sql1)
+        num = cur.execute(sql1)
         print("执行MySQL查询语句成功")
-        u_id = cur.fetchone()[0]
-        res = user.user_info(u_id)
+        if num == 0:
+            print(f"rsp_id({rsp_id})不存在!")
+            res = [False, None]
+        else:
+            u_id = cur.fetchone()[0]
+            res = user.user_info(u_id)
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql1, err))
-        res = False
+        res = [False, None]
     finally:
         cur.close()
         conn.commit()
@@ -99,6 +109,6 @@ def admin_agency_fee():
 
 if __name__ == '__main__':
     print("admin")
-    # print(admin_reqid_user_info('RQ101'))
-    # print(admin_rspid_user_info('RS101'))
+    print(admin_reqid_user_info('RQ101'))
+    print(admin_rspid_user_info('RS101'))
     print(admin_agency_fee())

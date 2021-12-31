@@ -103,5 +103,5 @@ def requestSpecInfo():
     ]
     return {
         "result": False if not res[0] else True,
-        "info_arr": None if not res[0] else dict(zip(keys, res[1])),
+        "info_obj": None if not res[0] else dict(zip(keys, res[1])),
     }

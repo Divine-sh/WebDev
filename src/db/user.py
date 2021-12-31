@@ -109,8 +109,9 @@ def user_login(arg_list):
     用户查询基本信息, 返回查询结果
     参数顺序: u_id
     返回值: 
-    成功返回list[True, u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
-    失败返回lsit[false, None i in range()]
+    成功返回list[True, list(tup)]
+    list(tup) = u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+    失败返回lsit[false, None]
 """
 def user_info(u_id):
     # 连接数据库
@@ -122,10 +123,10 @@ def user_info(u_id):
     res = cur.execute(sql)
     if res == 0:
         print("用户标识不存在！")
-        return [False] + [None for i in range(12)]
+        return [False, None]
     elif res == 1:
         tup = cur.fetchone()
-        return [True] + list(tup)
+        return [True, list(tup)]
 
 
 """

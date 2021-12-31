@@ -7,6 +7,7 @@ from flask_cors import CORS
 from src.api.user_api import user
 from src.api.request_api import req
 from src.api.response_api import rsp
+from src.api.admin_api import admin
 
 app = Flask(__name__,
             template_folder="public",
@@ -16,6 +17,7 @@ app = Flask(__name__,
 app.register_blueprint(user)
 app.register_blueprint(req)
 app.register_blueprint(rsp)
+app.register_blueprint(admin)
 CORS(app, supports_credentials=True)
 
 if __name__ == "__main__":

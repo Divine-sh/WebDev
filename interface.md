@@ -72,10 +72,16 @@
 
 ### 返回JSON
 
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_obj | json    | json对象 |
+
+###  JSON数组格式
+
 | 属性    | 类型      | 说明                                                         |
 | ------- | --------- | ------------------------------------------------------------ |
-| result  | boolean   | 成功为``True``，失败为``False``                              |
-| u_name  | string    | 成功为``True``，失败为``False``                              |
+| u_name  | string    | 用户名                                                       |
 | u_type  | int       | 用户类型，系统管理员(0) / 普通用户(1)                        |
 | r_name  | string    | 用户姓名                                                     |
 | c_type  | int       | 证件类型,中华人民共和国居民身份证0，台湾居民往来大陆通行证1，港澳居民来往内地通行证2，军人证件3，护照4，香港身份证5，澳门身份证6 |
@@ -279,10 +285,10 @@
 
 ### 返回JSON
 
-| 属性   | 类型    | 说明     |
-| ------ | ------- | -------- |
-| result | boolean | 查询结果 |
-| info   | json    | json对象 |
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_obj | json    | json对象 |
 
 ### JSON对象格式
 
@@ -360,7 +366,7 @@
 
 ## （3）用户提交响应信息
 
-接口 URL：```/api/user/response/respond```
+接口 URL：```/api/user/response/release```
 
 请求方法：```POST```
 
@@ -396,6 +402,13 @@
 | rsp_uid  | 是   | string | 响应用户标识 |
 
 ### 返回JSON
+
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_arr | json    | json数组 |
+
+###  JSON数组格式
 
 |属性|类型|说明|
 |---|---|---|
@@ -464,11 +477,18 @@
 
 ### 返回JSON
 
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_arr | json    | json数组 |
+
+###  JSON数组格式
+
 |属性|类型|说明|
 |---|---|---|
-|rsp_uid|string|响应用户标识|
-|req_id|string|请求标识|
 |rsp_id|string|响应标识|
+|req_id|string|请求标识|
+|rsp_uid|string|响应用户标识|
 |rsp_idct|string|响应描述|
 |rsp_time|timestamp|响应创建时间|
 
@@ -492,17 +512,25 @@
 
 ### 返回JSON
 
-| 属性    | 类型   | 说明     |
-| ------- | ------ | -------- |
-| u_name  | string | 用户名   |
-| u_type  | string | 用户类型 |
-| r_name  | string | 用户姓名 |
-| p_num   | string | 手机号码 |
-| u_level | string | 用户级别 |
-| u_idct  | string | 用户简介 |
-| r_city  | string | 注册城市 |
-| r_cmty  | string | 注册社区 |
-| r_time  | string | 注册时间 |
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_obj | json    | json对象 |
+
+###  JSON数组格式
+
+| 属性    | 类型   | 说明             |
+| ------- | ------ | ---------------- |
+| u_name  | string | 用户名           |
+| u_type  | string | 用户类型         |
+| r_name  | string | 用户姓名         |
+| p_num   | string | 手机号码         |
+| u_level | string | 用户级别         |
+| u_idct  | string | 用户简介         |
+| r_city  | string | 注册城市         |
+| r_cmty  | string | 注册社区         |
+| r_time  | string | 注册时间         |
+| m_time  | string | 最近一次修改时间 |
 
 ## （2）根据响应标识查询帮忙用户的基本信息
 
@@ -520,19 +548,27 @@
 
 ### 返回JSON
 
-| 属性    | 类型   | 说明     |
-| ------- | ------ | -------- |
-| u_name  | string | 用户名   |
-| u_type  | string | 用户类型 |
-| r_name  | string | 用户姓名 |
-| p_num   | string | 手机号码 |
-| u_level | string | 用户级别 |
-| u_idct  | string | 用户简介 |
-| r_city  | string | 注册城市 |
-| r_cmty  | string | 注册社区 |
-| r_time  | string | 注册时间 |
+| 属性     | 类型    | 说明     |
+| -------- | ------- | -------- |
+| result   | boolean | 查询结果 |
+| info_obj | json    | json对象 |
 
-## （3）管理员查询一定条件的请求帮忙信息的状态
+###  JSON数组格式
+
+| 属性    | 类型   | 说明             |
+| ------- | ------ | ---------------- |
+| u_name  | string | 用户名           |
+| u_type  | string | 用户类型         |
+| r_name  | string | 用户姓名         |
+| p_num   | string | 手机号码         |
+| u_level | string | 用户级别         |
+| u_idct  | string | 用户简介         |
+| r_city  | string | 注册城市         |
+| r_cmty  | string | 注册社区         |
+| r_time  | string | 注册时间         |
+| m_time  | string | 最近一次修改时间 |
+
+## （3）管理员查询一定条件的请求帮忙信息的状态*
 
 接口 URL：```/api/admin/requset_info```
 
@@ -558,7 +594,7 @@
 |req_id|string|请求标识|
 |req_status|int|状态|
 
-## （4）管理员查询一定条件的接受请求信息
+## （4）管理员查询一定条件的接受请求信息*
 
 接口 URL：```/api/admin/response_info```
 

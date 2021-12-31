@@ -64,8 +64,9 @@ def user_response_release(arg_list):
     参数顺序：
     rsp_uid
     返回值：
-    成功返回list[list[rsp_id,req_id,rsp_uid,rsp_idct,rsp_time,m_time,rsp_status]]
-    失败返回False
+    成功返回[True, tup_list]
+    tup_list = list[list[rsp_id,req_id,rsp_uid,rsp_idct,rsp_time,m_time,rsp_status]]
+    失败返回[False, None]
 """
 def user_response_info(rsp_uid):
     # 连接数据库
@@ -77,12 +78,12 @@ def user_response_info(rsp_uid):
     res = cur.execute(sql)
     if res == 0:
         print("用户未发布响应信息！")
-        return False
+        return [False, None]
     else:
         tup_list = []
         for tup in cur.fetchall():
             tup_list.append(list(tup))
-        return tup_list
+        return [True, tup_list]
 
 
 """
@@ -98,7 +99,13 @@ def user_response_delete(rsp_id):
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    # sql = f'DELETE FROM tbResponse WHERE rsp_id=\'{rsp_id}\''
+    # 判断响应信息是否存在
+    sql_exist = f'SELECT * FROM tbResponse ' \
+                f'WHERE rsp_id=\'{rsp_id}\''
+    num = cur.execute(sql_exist)
+    if num == 0:
+        return False
+
     sql = f'UPDATE tbResponse ' \
           f'SET rsp_status=3 ' \
           f'WHERE rsp_id=\'{rsp_id}\''
@@ -129,6 +136,13 @@ def user_response_modify(arg_list):
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
+    # 判断响应信息是否存在
+    sql_exist = f'SELECT * FROM tbResponse ' \
+                f'WHERE rsp_id=\'{arg_list[0]}\''
+    num = cur.execute(sql_exist)
+    if num == 0:
+        return False
+
     sql = f'UPDATE tbResponse ' \
           f'SET rsp_idct=\'{arg_list[1]}\' ' \
           f'WHERE rsp_id=\'{arg_list[0]}\''
@@ -177,26 +191,26 @@ def user_request_response_info(req_id):
     参数顺序：
     rsp_uid
     返回值：
-    成功返回lsit[list[]]
-    失败返回False
+    成功返回[True, tup_list]
+    tup_list = lsit[list[rsp_id,req_id,rsp_uid,rsp_idct,rsp_time]]
+    失败返回[False, None]
 """
 def user_response_accepted(rsp_uid):
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    sql = f'SELECT * ' \
-          f'FROM tbResponse WHERE rsp_uid=\'{rsp_uid}\''
+    sql = f'SELECT rsp_id,req_id,rsp_uid,rsp_idct,rsp_time ' \
+          f'FROM tbResponse WHERE rsp_uid=\'{rsp_uid}\' AND rsp_status=1'
     res = cur.execute(sql)
     if res == 0:
         print(f"用户{rsp_uid}不存在被接受的响应信息！")
-        return False
+        return [False, None]
     else:
         tup_list = []
         for tup in cur.fetchall():
-            if tup[6] == 1:
-                tup_list.append(list(tup))
-        return tup_list
+            tup_list.append(list(tup))
+        return [True, tup_list]
 
 
 """
@@ -224,6 +238,13 @@ def user_opt_response(arg_list):
     # 获取当前时间
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
+    # 判断请求id和响应id是否对应
+    sql = f'SELECT * FROM tbResponse ' \
+          f'WHERE req_id=\'{req_id}\' AND rsp_id=\'{rsp_id}\''
+    num = cur.execute(sql)
+    print("num: ", num)
+    if num == 0:
+        return False
     # 判断option
     if option:  # 接收响应
         sql1 = f'UPDATE tbResponse SET rsp_status=1 WHERE rsp_id=\'{rsp_id}\''
@@ -266,3 +287,4 @@ if __name__ == '__main__':
     # user_opt_response(['RQ101', 'UR101', 'RS102', 'UR102', False])
     # user_opt_response(['RQ101', 'UR101', 'RS102', 'UR102', True])
     # user_opt_response(['RQ101', 'UR101', 'RS101', 'UR100', True])
+    # print(user_response_accepted('UR100'))
