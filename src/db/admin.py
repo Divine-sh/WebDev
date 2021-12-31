@@ -10,12 +10,36 @@ import datetime
 
 
 """
+    返回所有用户的基本信息
+    返回值：
+        成功返回list[True, list(tup)]
+            list(tup): list of [u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+        失败返回lsit[false, None]
+"""
+def admin_all_users():
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    sql = f'SELECT u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time ' \
+          f'FROM tbUser'
+    res = cur.execute(sql)
+    if res == 0:
+        print("没有用户信息！")
+        return [False, None]
+    else:
+        tup_list = []
+        for tup in cur.fetchall():
+            tup_list.append(list(tup))
+        return [True, tup_list]
+
+"""
     根据请求标识查询发起请求用户的基本信息
     参数顺序：
         req_id
     返回值：
         成功返回list[True, list(tup)]
-            list(tup) = u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+            list(tup) = [u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
         失败返回lsit[false, None]
 """
 def admin_reqid_user_info(req_id):
@@ -50,7 +74,7 @@ def admin_reqid_user_info(req_id):
         rsp_id
     返回值：
         成功返回list[True, list(tup)]
-            list(tup) = u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+            list(tup) = [u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
         失败返回lsit[false, None]
 """
 def admin_rspid_user_info(rsp_id):
@@ -87,12 +111,13 @@ def admin_rspid_user_info(rsp_id):
         成功返回agency_fee
         失败返回False
 """
-def admin_agency_fee():
+def admin_agency_fee(start, end):
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    sql = f'SELECT COUNT(*) FROM tbSuccess'
+    sql = f'SELECT COUNT(*) FROM tbSuccess WHERE ' \
+          f'agc_time BETWEEN \'{start}\' AND \'{end}\''
     try:
         cur.execute(sql)
         tup = cur.fetchone()
@@ -109,6 +134,12 @@ def admin_agency_fee():
 
 if __name__ == '__main__':
     print("admin")
-    print(admin_reqid_user_info('RQ101'))
-    print(admin_rspid_user_info('RS101'))
-    print(admin_agency_fee())
+    # print(admin_reqid_user_info('RQ101'))
+    # print(admin_rspid_user_info('RS101'))
+    start_time = "2021-12-30"
+    end_time = "2021-12-31"
+    start = datetime.datetime.strptime(str(start_time), "%Y-%m-%d")
+    print(start)
+    end = datetime.datetime.strptime(str(end_time), "%Y-%m-%d")
+    print(end)
+    print(admin_agency_fee(start, end))
