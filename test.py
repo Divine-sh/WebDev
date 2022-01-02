@@ -5,6 +5,10 @@ dict1 = {
 # print(list(dict1.values()))
 # print([False] + [None for i in range(6)])
 # print(dict(list["a","b","c"]))
-a = "人数"
-if a == '人数':
-    print(True)
+# a = "人数"
+# if a == '人数':
+#     print(True)
+
+arg_list = ["aasda", "bdfdf", "csdsd"]
+a, b, c = arg_list
+print(a, b, c)

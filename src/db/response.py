@@ -312,11 +312,7 @@ def user_status_update(req_id):
 """
 def user_opt_response(arg_list):
     # 提取参数
-    req_id = arg_list[0]
-    req_uid = arg_list[1]
-    rsp_id = arg_list[2]
-    rsp_uid = arg_list[3]
-    option = arg_list[4]
+    req_id, req_uid, rsp_id, rsp_uid, option = arg_list
     # 连接数据库
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
