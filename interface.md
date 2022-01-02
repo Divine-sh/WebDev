@@ -1,3 +1,7 @@
+
+
+[TOC]
+
 # 一、用户类
 
 
@@ -7,7 +11,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -39,7 +43,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -62,7 +66,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -100,7 +104,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -125,7 +129,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -154,7 +158,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -193,7 +197,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -213,7 +217,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -240,7 +244,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -276,7 +280,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -315,7 +319,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -347,7 +351,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -372,7 +376,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -396,7 +400,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -415,13 +419,21 @@
 
 |属性|类型|说明|
 |---|---|---|
-|rsp_uid|string|响应用户标识|
-|req_id|string|请求标识|
 |rsp_id|string|响应标识|
+|req_id|string|请求标识|
+|rsp_uid|string|响应用户标识|
 |rsp_idct|string|响应描述|
 |rsp_time|timestamp|响应创建时间|
-|m_time|timestamp|响应修改时间|
 |rsp_status|int|状态|
+|req_cmty|string|请求发布社区|
+|req_uid|string|发布用户标识|
+|req_type|string|请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者）|
+|req_topic|string|请求主题|
+|req_idct|string|请求描述|
+|req_nop|int|请求人数|
+|end_time|timestamp|请求结束日期|
+|req_time|timestamp|请求发布时间|
+|req_status|int|请求状态信息|
 
 ## （5）用户修改还未被接受的响应信息
 
@@ -429,7 +441,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -450,7 +462,7 @@
 
 请求方法：```POST```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -470,7 +482,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -497,7 +509,7 @@
 
 
 
-# 二、管理员
+# 四、管理员
 
 ## （1）返回所有用户的信息
 
@@ -505,7 +517,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -543,7 +555,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -579,7 +591,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -615,7 +627,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -641,7 +653,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -670,7 +682,7 @@
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
@@ -691,27 +703,24 @@
 
 
 
-# 三、统计模块（待定）
+## （7）管理员查询已完成请求的中介费月份统计数据
 
-接口 URL：```/api/statistics```
+接口 URL：```/api/admin/statistics```
 
 请求方法：```GET```
 
-编码方式：```application/x-www-form-urlencoded```
+编码方式：```raw(json)```
 
 ### 请求参数
 
 |参数名称|必选|类型|说明|
 |----|----|----|----|
-|start|是|date|起始时间|
-|end|是|date|终止时间|
-|city|是|string|地区|
-|community|是|string|社区|
-|type|是|string|请求类型（小时工 、 搬重物 、 上下班搭车 、 社区服务自愿者）|
+|start|是|timestamp|起始时间|
+|end|是|timestamp|终止时间|
 
 ### 返回JSON
 
 |属性|类型|说明|
 |---|---|---|
-|time|string("xx-xx-xx")|时间（按月）|
-|money|int|每月中介费|
+|result|boolean| 查询结果 |
+|info_arr|JSON|JSON数组|

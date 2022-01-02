@@ -58,8 +58,16 @@ def responseInfo():
         "rsp_uid",
         "rsp_idct",
         "rsp_time",
-        "m_time",
         "rsp_status",
+        "req_cmty",
+        "req_uid",
+        "req_type",
+        "req_topic",
+        "req_idct",
+        "req_nop",
+        "end_time",
+        "req_time",
+        "req_status",
     ]
     return {
         "result": False if not res[0] else True,

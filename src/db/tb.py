@@ -56,6 +56,33 @@ def table_create(table):
     conn.close()
 
 
+'''
+    建触发器函数: 
+        在tbSuccess表上创建触发器，当有数据插入tbSuccess表时，更新tbProfit中的统计信息
+'''
+def trigger_create():
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # 如果已存在该触发器则删除
+    cur.execute("drop trigger if EXISTS TR_Profit")
+    # sql语句
+    sql_tr = var.sql_trigger
+    # print(sql_tr)
+    try:
+        # 执行sql语句并commit
+        cur.execute(sql_tr)
+        conn.commit()
+        print("建触发器TR_Profit成功")
+    except Exception as err:
+        # 出错时回滚（Rollback in case there is any error）
+        print("建触发器TR_Profit时出错 {}".format(str(err)))
+        conn.rollback()
+    # 断开连接
+    conn.close()
+
+
 def table_insert_df(table, df):
     # 索引为table
     table = table - 1
@@ -235,6 +262,9 @@ if __name__ == '__main__':
     # for i in range(1, 6):
     #     table_create(i)
     # table_create(4)
+    # table_create(6)
+    # table_create(5)
+    # trigger_create()
     now = datetime.datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     # table_insert_tuple(1, ('UR001', 'admin', 'admin', 0, '张三', 0, '110693184506080045', '18610750900', 0, '管理员用户，测试用', '北京', '测试社区', now, now))

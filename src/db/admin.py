@@ -132,6 +132,16 @@ def admin_agency_fee(start, end):
         return num*4
 
 
+"""
+    管理员查询已完成请求的中介费月份统计数据
+    参数顺序：
+        start,end
+    返回值：
+        成功返回list[True, list(tup)]
+            list(tup) = [u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+        失败返回lsit[false, None]
+"""
+
 if __name__ == '__main__':
     print("admin")
     # print(admin_reqid_user_info('RQ101'))

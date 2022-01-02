@@ -79,16 +79,20 @@ def user_response_info(rsp_uid):
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    sql = f'SELECT * ' \
-          f'FROM tbResponse WHERE rsp_uid=\'{rsp_uid}\''
+    sql = f'SELECT b.rsp_id,b.req_id,b.rsp_uid,b.rsp_idct,b.rsp_time,b.rsp_status,' \
+          f'a.req_cmty,a.req_uid,a.req_type,a.req_topic,a.req_idct,a.req_nop,a.end_time,a.req_time,a.req_status ' \
+          f'FROM tbRequest a INNER JOIN tbResponse b ' \
+          f'ON a.req_id=b.req_id ' \
+          f'WHERE rsp_uid=\'{rsp_uid}\''
     res = cur.execute(sql)
     if res == 0:
-        print("用户未发布响应信息！")
+        print(f"用户{rsp_uid}未发布响应信息！")
         return [False, None]
     else:
         tup_list = []
         for tup in cur.fetchall():
             tup_list.append(list(tup))
+        print(tup_list)
         return [True, tup_list]
 
 
@@ -179,7 +183,7 @@ def user_request_response_info(req_id):
     conn = var.pymysql_connect()
     # 使用cursor()方法创建光标
     cur = conn.cursor()
-    sql = f'SELECT * ' \
+    sql = f'SELECT rsp_id,req_id,rsp_uid,rsp_idct,rsp_time,rsp_status ' \
           f'FROM tbResponse WHERE req_id=\'{req_id}\''
     res = cur.execute(sql)
     if res == 0:
@@ -189,6 +193,7 @@ def user_request_response_info(req_id):
         tup_list = []
         for tup in cur.fetchall():
             tup_list.append(list(tup))
+        print(tup_list)
         return [True, tup_list]
 
 
@@ -341,7 +346,7 @@ def user_opt_response(arg_list):
             print(f"被接受的响应信息{rsp_id}状态修改")
             cur.execute(sql2, (req_id, req_uid, rsp_id, rsp_uid, now))
             print(f"帮忙成功表中添加记录")
-            res = [True, "已接收该响应"]
+            res = [True, "已接受该响应"]
         except Exception as err:
             print("执行MySQL语句时出错: \n%s" % err)
             res = [False, "已完成对该响应的处理"]

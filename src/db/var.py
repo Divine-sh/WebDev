@@ -13,7 +13,7 @@ def pymysql_connect():
 
 engine_creation = 'mysql+pymysql://root:123456@localhost:3306/webdev'
 table_Name = [
-    'tbUser', 'tbRequest', 'tbResponse', 'tbSuccess', 'tbProfit'
+    'tbUser', 'tbRequest', 'tbResponse', 'tbSuccess', 'tbProfit', 'tbRequestType'
 ]
 sql_create = [
     """ 
@@ -76,17 +76,36 @@ sql_create = [
     """,
     """
         (
-            n_month        TIMESTAMP NOT NULL,
-            region         VARCHAR(50) NOT NULL,
-            cmty           VARCHAR(50) NOT NULL,
-            req_type       VARCHAR (50) NOT NULL,
-            num            INT NOT NULL,
-            total_fee      INT NOT NULL,
-            PRIMARY KEY(n_month,region,cmty)
+            the_month    VARCHAR(10) NOT NULL,
+            trx_num      INT NOT NULL,
+            agc_fee      INT NOT NULL,
+            PRIMARY KEY(the_month)
+        );
+    """,
+    """
+        (
+            req_type       VARCHAR(50) NOT NULL,
+            type_id        INT NOT NULL UNIQUE KEY, 
+            PRIMARY KEY(req_type)
         );
     """,
 ]
-sql_trigger = []
+sql_trigger = """
+    CREATE TRIGGER TR_Profit
+    AFTER INSERT ON tbSuccess
+    FOR EACH ROW 
+    BEGIN
+        IF EXISTS(SELECT * FROM tbProfit 
+                  WHERE tbProfit.the_month=DATE_FORMAT(NEW.agc_time,'%Y-%m')) THEN
+            UPDATE tbProfit SET 
+            trx_num=trx_num+1,agc_fee=agc_fee+4
+            WHERE tbProfit.the_month=DATE_FORMAT(NEW.agc_time,'%Y-%m');
+        ELSE
+            INSERT INTO tbProfit(the_month,trx_num,agc_fee)
+            VALUES(DATE_FORMAT(NEW.agc_time,'%Y-%m'),1,4); 
+        END IF; 
+    END 
+"""
 sql_insert = [
     """
         insert into 
