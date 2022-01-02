@@ -348,7 +348,7 @@ def user_opt_response(arg_list):
             res = [True, "已接收该响应"]
         except Exception as err:
             print("执行MySQL语句时出错: \n%s" % err)
-            res = [False, str(err)]
+            res = [False, "已完成对该响应的处理"]
         finally:
             cur.close()
             conn.commit()
@@ -363,7 +363,7 @@ def user_opt_response(arg_list):
             res = [True, "已拒绝该响应"]
         except Exception as err:
             print("执行MySQL: %s 时出错: \n%s" % (sql, err))
-            res = [False, str(err)]
+            res = [False, "已完成对该响应的处理"]
         finally:
             cur.close()
             conn.commit()
