@@ -345,10 +345,10 @@ def user_opt_response(arg_list):
             print(f"被接受的响应信息{rsp_id}状态修改")
             cur.execute(sql2, (req_id, req_uid, rsp_id, rsp_uid, now))
             print(f"帮忙成功表中添加记录")
-            res = True
+            res = [True, "已接收该响应"]
         except Exception as err:
             print("执行MySQL语句时出错: \n%s" % err)
-            res = False
+            res = [False, str(err)]
         finally:
             cur.close()
             conn.commit()
@@ -360,10 +360,10 @@ def user_opt_response(arg_list):
         try:
             cur.execute(sql)
             print(f"被拒绝的响应信息{rsp_id}状态修改")
-            res = True
+            res = [True, "已拒绝该响应"]
         except Exception as err:
             print("执行MySQL: %s 时出错: \n%s" % (sql, err))
-            res = False
+            res = [False, str(err)]
         finally:
             cur.close()
             conn.commit()
