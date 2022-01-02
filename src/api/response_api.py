@@ -40,8 +40,9 @@ def responseRelease():
     arg_list = list(body.values())
     res = user_response_release(arg_list)
     return {
-        "result": False if res == 'RS0' else True,
-        "rsp_id": res,
+        "result": False if res[0] == 'RS0' else True,
+        "remark": res[1],
+        "rsp_id": res[0],
     }
 
 
@@ -51,9 +52,9 @@ def responseInfo():
     print(arg)
     res = user_response_info(arg)
     keys = [
-        "rsp_uid",
-        "req_id"
         "rsp_id",
+        "req_id",
+        "rsp_uid",
         "rsp_idct",
         "rsp_time",
         "m_time",

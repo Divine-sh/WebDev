@@ -27,7 +27,11 @@ def user_response_release(arg_list):
     cur = conn.cursor()
     # sql语句
     sql_ins = var.sql_insert[table]
-    # 将参数转化为元组
+    # 判断请求信息是否存在
+    sql_exist = f'SELECT * FROM tbResponse WHERE req_id=\'{arg_list[0]}\' AND rsp_uid=\'{arg_list[1]}\''
+    num = cur.execute(sql_exist)
+    if num != 0:
+        return ['RS0', '对应的请求信息已存在']
     # 生成req_id
     sql1 = f'SELECT nextid FROM tbsequence WHERE tablename=\'{table_name}\''
     sql2 = f'UPDATE tbsequence SET nextid=nextid+1 WHERE tablename=\'{table_name}\''
@@ -49,14 +53,16 @@ def user_response_release(arg_list):
         cur.execute(sql_ins, tp)
         print("执行MySQL插入语句成功")
         res = rsp_id
+        remark = "执行MySQL插入语句成功"
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql_ins, err))
         res = 'RS0'
+        remark = str(err)
     finally:
         cur.close()
         conn.commit()
         conn.close()
-        return res
+        return [res, remark]
 
 
 """

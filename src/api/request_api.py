@@ -60,7 +60,8 @@ def requestModify():
     print(arg_list)
     res = user_request_modify(arg_list)
     return {
-        "result": res
+        "result": res[0],
+        "remark": res[1],
     }
 
 
@@ -69,6 +70,7 @@ def requestCmtyInfo():
     arg = request.args.get("community")
     res = user_request_cmty_info(arg)
     keys = [
+        "req_cmty",
         "req_id",
         "req_uid",
         "req_type",
@@ -78,7 +80,8 @@ def requestCmtyInfo():
         "end_time",
         "req_photo",
         "req_time",
-        "req_status",
+        "m_time",
+        "req_status"
     ]
     return {
         "result": False if not res[0] else True,
@@ -91,15 +94,18 @@ def requestSpecInfo():
     arg = request.args.get("req_id")
     res = user_request_spec_info(arg)
     keys = [
-        "req_uid",
-        "req_type",
-        "req_topic",
-        "req_idct",
-        "req_nop",
-        "end_time",
-        "req_photo",
-        "req_time",
-        "req_status",
+    "req_cmty",
+     "req_id",
+     "req_uid",
+     "req_type",
+     "req_topic",
+     "req_idct",
+     "req_nop",
+     "end_time",
+     "req_photo",
+     "req_time",
+     "m_time",
+     "req_status"
     ]
     return {
         "result": False if not res[0] else True,

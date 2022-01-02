@@ -59,6 +59,7 @@ def userPerInfo():
 @user.route("/api/user/modify", methods=["POST"])
 def userPerInfoModify():
     body = request.json
+    print(body)
     arg_list = list(body.values())
     print(arg_list)
     return {

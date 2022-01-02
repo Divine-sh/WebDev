@@ -155,14 +155,16 @@ def user_request_modify(arg_list):
         cur.execute(sql)
         print("执行MySQL更新语句成功")
         res = True
+        remark = '执行MySQL更新语句成功'
     except Exception as err:
         print("执行MySQL: %s 时出错: \n%s" % (sql, err))
         res = False
+        remark = str(err)
     finally:
         cur.close()
         conn.commit()
         conn.close()
-        return res
+        return [res, remark]
 
 
 """
