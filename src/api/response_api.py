@@ -30,7 +30,8 @@ def requestOptResponse():
     print(arg_list)
     res = user_opt_response(arg_list)
     return {
-        "result": res,
+        "result": res[0],
+        "remark": res[1],
     }
 
 

@@ -220,6 +220,86 @@ def user_response_accepted(rsp_uid):
 
 
 """
+    判断请求是否已完成
+    a > b: 请求未完成，可以继续接收请求
+    a = b: 请求完成
+    参数：
+        req_id
+    返回值：
+        请求完成返回True
+        请求未完成返回False
+"""
+def if_request_complete(req_id):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # 获取帮忙请求人数
+    sql1 = f'SELECT req_nop FROM tbRequest ' \
+           f'WHERE req_id=\'{req_id}\''
+    cur.execute(sql1)
+    a = cur.fetchone()[0]
+    print(f'{req_id}的请求人数: {a}')
+    # 已接受的响应个数
+    sql2 = f'SELECT COUNT(*) FROM tbResponse ' \
+           f'WHERE req_id=\'{req_id}\' AND rsp_status=1'
+    cur.execute(sql2)
+    b = cur.fetchone()[0]
+    print(f'{req_id}已经接受的的请求人数: {b}')
+    if a > b:  # 请求未完成
+        return False
+    else:  # 请求已完成
+        return True
+
+
+"""
+    获取 帮忙请求的请求人数 a 和 已接受的响应个数 b
+    a > b: 可以继续接收请求
+    a = b: 请求完成，更新请求的状态为已完成（0），更新剩余待接受（0）的响应为拒绝（2）
+    参数：
+        req_id
+    返回值：
+        请求完成返回True
+        请求未完成返回False
+"""
+def user_status_update(req_id):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # 获取帮忙请求人数
+    sql1 = f'SELECT req_nop FROM tbRequest ' \
+           f'WHERE req_id=\'{req_id}\''
+    cur.execute(sql1)
+    a = cur.fetchone()[0]
+    print(f'{req_id}的请求人数: {a}')
+    # 已接受的响应个数
+    sql2 = f'SELECT COUNT(*) FROM tbResponse ' \
+           f'WHERE req_id=\'{req_id}\' AND rsp_status=1'
+    cur.execute(sql2)
+    b = cur.fetchone()[0]
+    print(f'{req_id}已经接受的的请求人数: {b}')
+    if a > b:  # 请求未完成
+        return False
+    else:  # 请求已完成
+        # 更新请求的状态为已完成（0）
+        sql3 = f'UPDATE tbRequest SET req_status=0 WHERE req_id=\'{req_id}\''
+        sql4 = f'UPDATE tbResponse SET rsp_status=2 WHERE req_id=\'{req_id}\' AND rsp_status=0'
+        try:
+            cur.execute(sql3)
+            print(f"请求信息{req_id}状态修改为已完成")
+            cur.execute(sql4)
+            print(f"与请求信息{req_id}相关的未接受响应状态修改为拒绝")
+        except Exception as err:
+            print("执行MySQL: %s 时出错: \n%s" % err)
+        finally:
+            cur.close()
+            conn.commit()
+            conn.close()
+            return True
+
+
+"""
     用户处理响应信息，返回处理结果
     注意，处理响应信息的情况：
         1.拒绝，被拒绝的响应信息状态修改
@@ -227,8 +307,8 @@ def user_response_accepted(rsp_uid):
     参数顺序：arg_list(list)
     req_id,req_uid,rsp_id,rsp_uid,option
     返回值：
-    成功返回True
-    失败返回False
+    成功返回[True, remark]
+    失败返回[False, remark]
 """
 def user_opt_response(arg_list):
     # 提取参数
@@ -250,7 +330,11 @@ def user_opt_response(arg_list):
     num = cur.execute(sql)
     print("num: ", num)
     if num == 0:
-        return False
+        return [False, '请求ID和响应ID不对应！']
+    # 判断人数是否达上限
+    if if_request_complete(req_id):  # 已完成，人数达上限
+        return [False, '响应人数已达上限！']
+
     # 判断option
     if option:  # 接收响应
         sql1 = f'UPDATE tbResponse SET rsp_status=1 WHERE rsp_id=\'{rsp_id}\''
@@ -265,6 +349,12 @@ def user_opt_response(arg_list):
         except Exception as err:
             print("执行MySQL语句时出错: \n%s" % err)
             res = False
+        finally:
+            cur.close()
+            conn.commit()
+            conn.close()
+        # 被接受的相应信息增加，更新状态信息
+        print(f"请求信息{req_id}已完成:", user_status_update(req_id))
     else:  # 拒绝响应
         sql = f'UPDATE tbResponse SET rsp_status=2 WHERE rsp_id=\'{rsp_id}\''
         try:
@@ -274,9 +364,10 @@ def user_opt_response(arg_list):
         except Exception as err:
             print("执行MySQL: %s 时出错: \n%s" % (sql, err))
             res = False
-    cur.close()
-    conn.commit()
-    conn.close()
+        finally:
+            cur.close()
+            conn.commit()
+            conn.close()
     return res
 
 

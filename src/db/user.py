@@ -30,7 +30,7 @@ def user_register_check(u_name):
 """
     用户注册, 返回注册结果
     参数顺序: arg_list(list)
-    u_name, u_pwd, u_type, r_name, c_type, c_num, p_num, u_level, u_idct，r_city，r_cmty
+    u_name, u_pwd, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty
     返回值: string
     成功返回[u_id,remark],失败返回['UR0',remark]
 """
