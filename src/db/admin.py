@@ -138,9 +138,42 @@ def admin_agency_fee(start, end):
         start,end
     返回值：
         成功返回list[True, list(tup)]
-            list(tup) = [u_name, u_type, r_name, c_type, c_num, p_num, u_level, u_idct, r_city, r_cmty, r_time, m_time]，
+            list(tup) = [the_month, trx_num, agc_fee]
         失败返回lsit[false, None]
 """
+def admin_statistics_info(start, end):
+    # 连接数据库
+    conn = var.pymysql_connect()
+    # 使用cursor()方法创建光标
+    cur = conn.cursor()
+    # 格式化start和end
+    start = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    end = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+    # print(type(start), start)
+    # print(type(end), end)
+    start_month = datetime.datetime.strftime(start, "%Y-%m")
+    end_month = datetime.datetime.strftime(end, "%Y-%m")
+    print(type(start_month), start_month)
+    print(type(end_month), end_month)
+    # sql语句
+    sql1 = f'SELECT * FROM tbProfit ' \
+           f'WHERE the_month BETWEEN \'{start_month}\' AND \'{end_month}\''
+    num = cur.execute(sql1)
+    print("执行MySQL查询语句成功")
+    if num == 0:
+        print(f"tbProfit中还没有收益信息")
+        res = [False, None]
+    else:
+        tup_list = []
+        for tup in cur.fetchall():
+            tup_list.append(list(tup))
+        print(tup_list)
+        res = [True, tup_list]
+    cur.close()
+    conn.commit()
+    conn.close()
+    return res
+
 
 if __name__ == '__main__':
     print("admin")

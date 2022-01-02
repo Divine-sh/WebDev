@@ -88,6 +88,24 @@ def adminFee():
     }
 
 
+@admin.route("/api/admin/statistics", methods=["GET"])
+def adminStatistics():
+    start = request.args.get("start_time")
+    end = request.args.get("end_time")
+    print(type(start), start)
+    print(type(end), end)
+    res = admin_statistics_info(start, end)
+    keys = [
+        "the_month",
+        "trx_num",
+        "agc_fee",
+    ]
+    return {
+        "result": res[0],
+        "info_arr": None if not res[0] else dict(zip(range(len(res[1])), [dict(zip(keys, i)) for i in res[1]])),
+    }
+
+
 
 # @admin.route("/api/admin/requset_info", methods=["GET"])
 # @admin.route("/api/admin/response_info", methods=["GET"])

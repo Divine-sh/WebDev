@@ -715,8 +715,8 @@
 
 |参数名称|必选|类型|说明|
 |----|----|----|----|
-|start|是|timestamp|起始时间|
-|end|是|timestamp|终止时间|
+|start_time|是|timestamp|起始时间|
+|end_time|是|timestamp|终止时间|
 
 ### 返回JSON
 
@@ -724,3 +724,13 @@
 |---|---|---|
 |result|boolean| 查询结果 |
 |info_arr|JSON|JSON数组|
+
+### JSON数组格式
+
+| 属性      | 类型            | 说明             |
+| --------- | --------------- | ---------------- |
+| the_month | string(yyyy-mm) | 月份             |
+| trx_num   | int             | 当月累计成交笔数 |
+| agc_fee   | int             | 当月累计中介费   |
+
+### 

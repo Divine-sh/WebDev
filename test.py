@@ -12,3 +12,7 @@ dict1 = {
 arg_list = ["aasda", "bdfdf", "csdsd"]
 a, b, c = arg_list
 print(a, b, c)
+
+keys = ["aa", "bb", "cc"]
+values = [1, 2, 3]
+print(dict(zip(keys, values)))
